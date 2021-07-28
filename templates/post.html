@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-md-10 offset-md-3">
+        <div class="col-log-8">
+<h3>Posts</h3>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-10 offset-md-3">
+        <div class="col-log-8">
+<form >
+{% csrf_token %}
+<input type="text" name = "keyword" class="input-sm" maxlength="64" placeholder="Sreach...">
+<button type="submit" class="btn btn-danger">search</button>
+
+</form>
+
+        </div>
+    </div>
+
+
+</div>
+
+{% if post %}
+{% for posts in post %}
+<div class="row">
+    <div class="col-md-10 offset-md-3">
+        <!--Post content -->
+        <div class="col-log-8">
+            <!--Title-->
+            <a href="{% url 'post:detail' posts.slug %}" ><h2 class="mt-4" >{{posts.title}}</h2></a>
+
+<!--Author-->
+<p class="lead" >
+    {{posts.author.username}} by create
+</p>
+<!--Date/Time-->
+<p>{{posts.created_date}}</p>
+<hr>
+<!--Post image-->
+{% if posts.post_image %}
+      <a href="{% url 'post:detail' posts.slug %}"><img class="img-fluid rounded" src="{{posts.post_image.url}}" alt=""></a>
+      {% endif %}
+
+<hr>
+
+    <!--Post content-->
+    <p class="lead" >
+        {{posts.content|safe|truncatewords:50}}
+    </p>
+    <a href="{% url 'post:detail' posts.slug %}" class="btn btn-danger my-3" >Davomi</a>
+        </div></div></div>
+
+{% endfor %}  
+{% else %}
+<div class ="row">
+    
+    <div class="col-md-10 offset-md-3">
+        <div class="col-lg-8">
+<div class = "alert alert-danger">
+   NO POST
+</div>
+</div>
+</div>
+</div>
+{% endif %}
+    
+{% endblock %}

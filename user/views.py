@@ -7,26 +7,25 @@ from django.contrib.auth import login,authenticate,logout
 # Create your views here.
 
 def register(request):
-
-    form=RegisterForm(request.POST or None)
-
+    
+    form = RegisterForm(request.POST or None)
     if form.is_valid():
+        username = form.cleaned_data.get("username")
+        password = form.cleaned_data.get("password")
 
-            # Create a new user object but avoid saving it yet
-            newuser = form.save(commit=False)
-            # Set the chosen password
-            newuser.set_password(
-            form.cleaned_data['password'])
-            # Save the User object
-            newuser.save()
+        newUser = User(username =username)
+        newUser.set_password(password)
 
-            login(request,newuser, backend='django.contrib.auth.backends.ModelBackend')
-            messages.info(request,'You have successfully registered...')
-            return redirect("index")
+        newUser.save()
+        login(request,newUser)
+        messages.info(request,"...")
+
+        return redirect("index")
     context = {
             "form" : form
-            }
-    return render(request,'user/register.html',context)
+        }
+    return render(request,"register.html",context)
+
 
 
 
@@ -44,15 +43,15 @@ def loginUser(request):
         user = authenticate(username = username,password = password)
 
         if user is None:
-            messages.info(request,"Kullanıcı Adı veya Parola Hatalı")
+            messages.info(request,"Username or Password Incorrect")
             return render(request,"user/login.html",context)
 
-        messages.success(request,"Başarıyla Giriş Yaptınız")
+        messages.success(request,"...")
         login(request,user,backend='django.contrib.auth.backends.ModelBackend')
         return redirect("index")
     return render(request,"user/login.html",context)
 
-def logoutuser(request):
+def logoutUser(request):
     logout(request)
     messages.success(request,'You have successfully  Logout')
     return redirect('index')

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.db import models
-from post.models import Post
+from post.models import Post,Comment
 # Register your models here.
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
@@ -12,3 +12,5 @@ class PostAdmin(admin.ModelAdmin):
 
     class Meta:
         model=Post
+
+admin.site.register(Comment)

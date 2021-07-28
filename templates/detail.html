@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+<!--Post Content Column-->
+<div class="col-lg-8">
+    <!--Title-->
+    <h3 class="mt-4">
+        {{post.title}}
+    </h3>
+    <!--Author-->
+    <p class="lead" >
+        {{post.author.username}} by created.
+    </p>
+    <hr>
+    <!--Date/Time-->
+    <p>{{post.created_date}}</p>
+    <hr>
+    <!--Image-->
+    
+    {% if post.post_image %}
+        <img class="img-fluid rounded" src="{{post.post_image.url}}" alt="">
+    {% endif %}
+
+    <hr>
+    <!--Post contend end-->
+        <p class="lead" >
+            {{post.content|safe}}
+        </p>
+        <hr>
+        <h4>Comments</h4>
+        
+        {% if comments %}
+        {% for comment in comments %}
+            
+       
+        <div class="media mb-4">
+            <div class="media-body">
+                <h5 class="mt-0">{{ comment.comment_author}}</h5>
+            {{comment.comment_date}} <br>
+            {{comment.comment_content}}
+
+            </div>
+
+        </div>
+        {% endfor %}
+
+        {% else %}
+        <div class ="alert alert-danger">
+            NO comments
+          </div>
+        {% endif %}
+        <div class="card my-4 container">
+            <h5 class="card-header">Add comment:</h5>
+            <div class="card-body">
+              <form method = "post" action = "{% url 'post:comment' post.slug %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="formGroupExampleInput">Name</label>
+                    <input name = "comment_author" type="text" class="form-control" id="formGroupExampleInput" placeholder="who are you ">
+                  </div>
+                <div class="form-group">
+                    <label for="formGroupExampleInput">Commet</label>
+                  <textarea name = "comment_content" class="form-control" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-danger my-3">Add</button>
+              </form>
+            </div>
+          </div>
+</div>
+</div>
+{% endblock %}
